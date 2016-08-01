@@ -37,11 +37,20 @@ lickThree = \relative c'' {
   % < eflat\3 f\2 > 4.
   % < e\3 fsharp\2 > 4.
   % < f\3 g\2 > 4
-  \bendOn
-  \bendGrace eflat\3( f 4. \3)
-  \bendGrace e\3( fsharp 4. \3)
-  \bendGrace f\3( g 4 \3)
-  \bendOff
+  <<
+    {
+      \bendOn
+      \bendGrace eflat\3( \once \override TabNoteHead.transparent = ##f f 4. \3)
+      \bendGrace e 8 \3( fsharp 4. \3)
+      \bendGrace f 8 \3( g 4 \3)
+      \bendOff
+    }
+    {
+      f 4. \2
+      fsharp 4. \2
+      g 4 \2
+    }
+  >>
 }
 
 music = \relative {
@@ -51,14 +60,16 @@ music = \relative {
   \tempo 4 = 75
   \key g \minor
 
-  \repeat unfold 2 {
-    \repeat unfold 2 {
-      \lickOne
-      \lickTwo
-    }
-    \lickOne
-    \lickThree
-  }
+  % \repeat unfold 2 {
+  %   \repeat unfold 2 {
+  %     \lickOne
+  %     \lickTwo
+  %   }
+  %   \lickOne
+  %   \lickThree
+  % }
+
+  \lickThree
 
 }
 \score {
@@ -68,7 +79,7 @@ music = \relative {
     %   \music
     % }
     \new Staff {
-      \clef "treble"
+      \clef "treble_8"
       \music
     }
     \new TabStaff {

@@ -38,6 +38,8 @@
 
 #(define bend-arrowhead-width 0.8)
 
+#(define hide-bent-tab-note-head #t)
+
 #(define y-distance-from-staffline-to-arrow 0.35)
 
 %%% internal commands
@@ -231,7 +233,10 @@ thickness begin-x line-y end-x line-y))))
                             2)))
 
            (set! begin-x (+ begin-x x-offset))
-           (ly:grob-set-property! right-tab-note-head 'transparent #t)))
+           ;;(cond (hide-bent-tab-note-head)
+            (ly:grob-set-property! right-tab-note-head 'transparent #t)
+           ;;)
+           ))
 
      ;; draw resulting bend arrow
      (grob-interpret-markup grob
