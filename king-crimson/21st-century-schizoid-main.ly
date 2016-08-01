@@ -20,16 +20,18 @@ music = \relative c {
 
   \key g \minor
 
-  < c g' >4
-  < bflat f' >16(\glissando
-  < c g' >)
-  < bflat eflat >8
-  < c f >8-.
-  < c g' >8(
-  < c g' >4)
-  < f, c' f>4.
-  < fsharp csharp' fsharp>4.
-  < g d' g>4
+  \repeat unfold 2 {
+    < c g' >4
+    < bflat f' >16(\glissando
+    < c g' >)
+    < bflat eflat >8
+    < c f >8-.
+    < c g' >8(
+    < c g' >4)
+    < f, c' f>4.
+    < fsharp csharp' fsharp>4.
+    < g d' g>4
+  }
 
 }
 \score {
