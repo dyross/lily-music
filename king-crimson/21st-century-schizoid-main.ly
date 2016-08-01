@@ -6,7 +6,10 @@
   composer = "King Crimson"
   instrument = "Guitar"
 }
+
 \include "english.ly"
+\include "include/guitar-string-bending-definitions.ily"
+
 \layout {
   indent = 0.0\cm
   \omit Voice.StringNumber
@@ -31,15 +34,21 @@ lickTwo = \relative {
 }
 
 lickThree = \relative c'' {
-  < eflat\3 f\2 > 4.
-  < e\3 fsharp\2 > 4.
-  < f\3 g\2 > 4
+  % < eflat\3 f\2 > 4.
+  % < e\3 fsharp\2 > 4.
+  % < f\3 g\2 > 4
+  \bendOn
+  \bendGrace eflat\3( f 4. \3)
+  \bendGrace e\3( fsharp 4. \3)
+  \bendGrace f\3( g 4 \3)
+  \bendOff
 }
 
 music = \relative {
   \set minimumFret = #1
   \set restrainOpenStrings = ##t
 
+  \tempo 4 = 75
   \key g \minor
 
   \repeat unfold 2 {
