@@ -41,8 +41,8 @@ lickThree = \relative c'' {
     {
       \bendOn
       \bendGrace eflat\3( \once \override TabNoteHead.transparent = ##f f 4. \3)
-      \bendGrace e 8 \3( fsharp 4. \3)
-      \bendGrace f 8 \3( g 4 \3)
+      \bendGrace e \3( fsharp 4. \3)
+      \bendGrace f \3( g 4 \3)
       \bendOff
     }
     {

@@ -38,7 +38,7 @@
 
 #(define bend-arrowhead-width 0.8)
 
-#(define hide-bent-tab-note-head #t)
+#(define hide-bent-tab-note-head #f)
 
 #(define y-distance-from-staffline-to-arrow 0.35)
 
@@ -189,6 +189,36 @@ thickness begin-x line-y end-x line-y))))
        (make-pointedSlur-markup bend-line-thickness
          first-x first-y middle-x middle-y forth-x forth-y))))
 
+#(define (parenthesize-callback callback)
+   (define (parenthesize-stencil grob)
+     (let* ((fn (ly:grob-default-font grob))
+            (pclose (ly:font-get-glyph fn "accidentals.rightparen"))
+            (popen (ly:font-get-glyph fn "accidentals.leftparen"))
+            (subject (callback grob))
+            ;; get position of stem
+            (stem-pos (ly:grob-property grob 'stem-attachment))
+            ;; remember old size
+            (subject-dim-x (ly:stencil-extent subject X))
+            (subject-dim-y (ly:stencil-extent subject Y)))
+
+       ;; add parens
+       (set! subject
+             (ly:stencil-combine-at-edge
+              (ly:stencil-combine-at-edge subject X RIGHT pclose 0)
+              X LEFT popen 0))
+
+       ;; adjust stem position
+       (set! (ly:grob-property grob 'stem-attachment)
+             (cons (- (car stem-pos) 0.43) (cdr stem-pos)))
+
+       ;; adjust size
+       (ly:make-stencil
+        (ly:stencil-expr subject)
+        (interval-widen subject-dim-x 0.5)
+        subject-dim-y)))
+
+   parenthesize-stencil)
+
 #(define (slur::draw-bend-arrow grob)
    (let* ((staff-symbol (ly:grob-object grob 'staff-symbol))
           (line-count (ly:grob-property staff-symbol 'line-count))
@@ -233,10 +263,13 @@ thickness begin-x line-y end-x line-y))))
                             2)))
 
            (set! begin-x (+ begin-x x-offset))
-           ;;(cond (hide-bent-tab-note-head)
-            (ly:grob-set-property! right-tab-note-head 'transparent #t)
-           ;;)
-           ))
+           (if hide-bent-tab-note-head
+             (ly:grob-set-property! right-tab-note-head 'transparent #t)
+             (ly:grob-set-property! right-tab-note-head 'stencil
+              (parenthesize-callback tab-note-head::print))
+            )
+         )
+      )
 
      ;; draw resulting bend arrow
      (grob-interpret-markup grob
